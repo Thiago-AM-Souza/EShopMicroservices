@@ -30,13 +30,11 @@ namespace Catalog.API.Products.UpdateProduct
     public record UpdateProductResult(bool IsSuccess);
 
     internal class UpdateProductCommandHandler
-        (IDocumentSession session, ILogger<GetProductByIdQueryHandler> logger)
+        (IDocumentSession session)
         : ICommandHandler<UpdateProductCommand, UpdateProductResult>
     {
         public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
         {
-            logger.LogInformation("UpdateProductHandler.Handle called with {@Command}", command);
-
             var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
 
             if (product is null)
