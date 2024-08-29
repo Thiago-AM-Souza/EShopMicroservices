@@ -18,7 +18,7 @@ var app = builder.Build();
 // configure the http request pipeline
 app.UseApiServices();
 
- if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     await app.InitializeDatabaseAsync();
 }
