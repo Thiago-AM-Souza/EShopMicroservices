@@ -16,6 +16,10 @@
 
             UpdateOrderWithNewValues(order, command.Order);
 
+            dbContext.Orders.Update(order);
+
+            await dbContext.SaveChangesAsync(cancellationToken);
+
             return new UpdateOrderResult(true);
         }
 
@@ -38,7 +42,7 @@
                                                    orderDto.BillingAddress.ZipCode);
 
             var updatedPayment = Payment.Of(orderDto.Payment.CardName,
-                                            orderDto.Payment.CarNumber,
+                                            orderDto.Payment.CardNumber,
                                             orderDto.Payment.Expiration,
                                             orderDto.Payment.Cvv,
                                             orderDto.Payment.PaymentMethod);

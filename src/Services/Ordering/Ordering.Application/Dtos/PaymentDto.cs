@@ -2,7 +2,7 @@
 {
     public record PaymentDto(
         string CardName,
-        string CarNumber,
+        string CardNumber,
         string Expiration,
         string Cvv,
         int PaymentMethod);
