@@ -15,8 +15,8 @@ namespace Ordering.Infrastructure
 
             services.AddDbContext<ApplicationDbContext>((sp, options) =>
             {
-                options.AddInterceptors(sp.GetService<ISaveChangesInterceptor>());
-                options.UseSqlServer(connectionString);
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                    options.UseSqlServer(connectionString);
             });
 
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
