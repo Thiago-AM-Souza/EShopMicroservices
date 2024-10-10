@@ -1,22 +1,28 @@
 ﻿namespace Shopping.Web.Pages
 {
-    public class IndexModel(ICatalogService catalogService, IBasketService basketService, ILogger<IndexModel> logger)
+    public class ProductDetailModel
+        (ICatalogService catalogService, IBasketService basketService, ILogger<ProductDetailModel> logger)
         : PageModel
     {
-        public IEnumerable<ProductModel> ProductList { get; set; } = new List<ProductModel>();
+        public ProductModel Product { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync()
+        [BindProperty]
+        public string Color { get; set; } = default!;
+
+        [BindProperty]
+        public int Quantity { get; set; } = default!;
+
+        public async Task<IActionResult> OnGetAsync(Guid productId)
         {
-            logger.LogInformation("Index Page visited");
-            var result = await catalogService.GetProducts();
-            ProductList = result.Products;
+            var response = await catalogService.GetProduct(productId);
+            Product = response.Product;
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAddToCartAsync(Guid productId)
         {
             logger.LogInformation("Add to cart button clicked");
-
             var productResponse = await catalogService.GetProduct(productId);
 
             var basket = await basketService.LoadUserBasket();
@@ -26,13 +32,13 @@
                 ProductId = productId,
                 ProductName = productResponse.Product.Name,
                 Price = productResponse.Product.Price,
-                Quantity = 1,
-                Color = "Black"
+                Quantity = Quantity,
+                Color = Color
             });
 
             await basketService.StoreBasket(new StoreBasketRequest(basket));
 
             return RedirectToPage("Cart");
-        }        
+        }
     }
 }
